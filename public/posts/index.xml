@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Cactus theme example</title>
-    <link>https://example.com/posts/</link>
-    <description>Recent content in Posts on Cactus theme example</description>
+    <title>Posts on Paul Coghlan&#39;s Public Scratchpad</title>
+    <link>https://paulcoghlan.github.io/posts/</link>
+    <description>Recent content in Posts on Paul Coghlan&#39;s Public Scratchpad</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>You</copyright>
-    <lastBuildDate>Thu, 08 Jul 2021 11:32:35 +0100</lastBuildDate><atom:link href="https://example.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Paul Coghlan</copyright>
+    <lastBuildDate>Thu, 08 Jul 2021 12:32:35 +0100</lastBuildDate><atom:link href="https://paulcoghlan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>My First Post</title>
-      <link>https://example.com/posts/my-first-post/</link>
-      <pubDate>Thu, 08 Jul 2021 11:32:35 +0100</pubDate>
+      <link>https://paulcoghlan.github.io/posts/my-first-post/</link>
+      <pubDate>Thu, 08 Jul 2021 12:32:35 +0100</pubDate>
       
-      <guid>https://example.com/posts/my-first-post/</guid>
+      <guid>https://paulcoghlan.github.io/posts/my-first-post/</guid>
       <description></description>
     </item>
     
