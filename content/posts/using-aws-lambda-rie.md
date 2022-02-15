@@ -1,7 +1,7 @@
 ---
 title: "Tips for using AWS Lambda Runtime Interface Emulator"
-date: 2022-02-14T17:59:26Z
-draft: true
+date: 2022-02-15T18:29:26Z
+draft: false
 tags:
     - aws
     - docker
