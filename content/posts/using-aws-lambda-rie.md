@@ -1,5 +1,5 @@
 ---
-title: "Tips for using AWS Lambda RIE"
+title: "Tips for using AWS Lambda Runtime Interface Emulator"
 date: 2022-02-14T17:59:26Z
 draft: true
 tags:
