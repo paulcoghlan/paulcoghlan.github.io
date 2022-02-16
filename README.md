@@ -31,4 +31,25 @@ Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
 Press Ctrl+C to stop
 ```
 
+## Changing theme using mods
 
+Install module
+
+```sh
+hugo mod init github.com/<your_user>/<your_project>
+```
+
+Update `config.toml`:
+
+```yml
+[module]
+[[module.imports]]
+  path = 'github.com/spf13/hyde'
+
+```
+
+Update modules:
+
+```sh
+hugo mod get -u
+```

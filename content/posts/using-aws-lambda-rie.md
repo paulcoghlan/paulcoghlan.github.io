@@ -21,7 +21,7 @@ convert the HTML to PDF, and upload the PDF to S3.
 I was using `wkhtmltopdf` HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3
 integration glue code in Kotlin to align with the rest of the codebase.
 
-{{< figure src="/2022/convertor.png" width="320" >}}
+{{< figure src="/2022/convertor.png" style="width: 320px;" >}}
 
 ## Why use a Lambda with a custom Docker image?
 
@@ -66,27 +66,27 @@ The steps are as follows:
 
 - Mount AWS Runtime Interface Emulator (RIE) directory and specify com.amazonaws.services.lambda.runtime.api.client.AWSLambda entrypoint:
 
-```sh
+{{< code language="sh" id="1" isCollapsed="false" >}}
 # Install RIE - provides fake Lambda HTTP endpoint to trigger your function
 mkdir -p ~/.aws-lambda-rie && \
     curl -Lo ~/.aws-lambda-rie/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie && \
     chmod +x ~/.aws-lambda-rie/aws-lambda-rie   
-```
+{{< /code >}}
 
 - Run Docker image containing target function (`lambdas:latest` in this instance):
 
-```sh
+{{< code language="sh" id="2" isCollapsed="false" >}}
 docker run -v ~/.aws-lambda-rie:/aws-lambda \ 
 --entrypoint /aws-lambda/aws-lambda-rie -p 9000:8080 lambdas:latest /usr/bin/java \
 -cp '.*:/opt/java/generate_pdf.jar' \
 com.amazonaws.services.lambda.runtime.api.client.AWSLambda  lambdas.generatepdf.GeneratePDF::handleRequest
-```
+{{< /code >}}
 
 - Finally, you can invoke your Lambda function via the RIE endpoint:
 
-```sh
+{{< code language="sh" id="3" isCollapsed="false" >}}
 curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
-```
+{{< /code >}}
 
 ## Conclusion
 
@@ -98,7 +98,7 @@ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d
 - Watch out for Dockerfile ENTRYPOINT vs CMD! 🦶🔫 - see http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/
 - You can quickly check that how your environment variables are setup from:
 
-```sh
+{{< code language="sh" id="4" isCollapsed="false" >}}
 docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' <image> 
-```
+{{< /code >}}
 
