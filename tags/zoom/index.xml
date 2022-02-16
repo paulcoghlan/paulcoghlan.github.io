@@ -1,5 +1,32 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>zoom on Paul Coghlan's Public Scratchpad</title><link>https://paulcoghlan.github.io/tags/zoom/</link><description>Recent content in zoom on Paul Coghlan's Public Scratchpad</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><copyright>Paul Coghlan</copyright><lastBuildDate>Thu, 09 Sep 2021 16:34:28 +0100</lastBuildDate><atom:link href="https://paulcoghlan.github.io/tags/zoom/index.xml" rel="self" type="application/rss+xml"/><item><title>Ikea Homestudio Lights</title><link>https://paulcoghlan.github.io/posts/ikea-homestudio-lights/</link><pubDate>Thu, 09 Sep 2021 16:34:28 +0100</pubDate><guid>https://paulcoghlan.github.io/posts/ikea-homestudio-lights/</guid><description>I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look part of a typical desk environment.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>zoom on paulcoghlan.github.io</title><link>/tags/zoom/</link><description>Recent content in zoom on paulcoghlan.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><lastBuildDate>Thu, 09 Sep 2021 16:34:28 +0100</lastBuildDate><atom:link href="/tags/zoom/index.xml" rel="self" type="application/rss+xml"/><item><title>Ikea Homestudio Lights</title><link>/posts/ikea-homestudio-lights/</link><pubDate>Thu, 09 Sep 2021 16:34:28 +0100</pubDate><guid>/posts/ikea-homestudio-lights/</guid><description>I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look part of a typical desk environment.
 My setup is based on two $39/£29 IKEA Skurup desk lamps.
-I bought some Osram Zigbee E14 LED lights from Amazon UK when they were discounted to £4.49, and with the help of a vice I very carefully popped the plastic cover off:</description></item><item><title>Diy Teleprompter</title><link>https://paulcoghlan.github.io/posts/diy-teleprompter/</link><pubDate>Wed, 01 Sep 2021 15:34:58 +0100</pubDate><guid>https://paulcoghlan.github.io/posts/diy-teleprompter/</guid><description>Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.
+I bought some Osram Zigbee E14 LED lights from Amazon UK when they were discounted to £4.49, and with the help of a vice I very carefully popped the plastic cover off:</description><content>&lt;p>I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look
+part of a typical desk environment.&lt;/p>
+&lt;p>My setup is based on two $39/£29 &lt;a href="https://www.ikea.com/gb/en/p/skurup-work-wall-lamp-black-80471143/">IKEA Skurup&lt;/a> desk lamps.&lt;/p>
+&lt;p>I bought some Osram Zigbee E14 LED lights from &lt;a href="https://www.amazon.co.uk/gp/product/B0747VDHG3">Amazon UK&lt;/a> when they were discounted to £4.49, and
+with the help of a vice I very carefully popped the plastic cover off:&lt;/p>
+&lt;p>&lt;img src="/2021/IMG_4514.jpg" alt="Osram lamp with top cover off">&lt;/p>
+&lt;p>(notice there are two bits of glue on the cover - maybe a heat gun would have made it easier?)&lt;/p>
+&lt;p>Here&amp;rsquo;s what the modified bulb looks like in the lamp:
+&lt;img src="/2021/no-cover.jpg" alt="Bulb in situ">&lt;/p>
+&lt;p>I ordered a 3mm thick acrylic disc cut to the measured size of the lamp interior (117mm) from &lt;a href="https://www.simplyplastics.com/catalog/discs/cast-acrylic-round-discs/led-light-diffusing-opal-acrylic-disc/c-24/c-93/p-962">SimplyPlastics&lt;/a>. I think the result isn&amp;rsquo;t too shabby:&lt;/p>
+&lt;p>&lt;img src="/2021/finished-product.jpg" alt="Ikea lamp with diffuser">&lt;/p>
+&lt;p>Here are some comparison pics:&lt;/p>
+&lt;figure class="left" >
+&lt;img src="/2021/original-lamp.jpg" />
+&lt;/figure>
+&lt;figure class="left" >
+&lt;img src="/2021/with-disc.jpg" />
+&lt;/figure>
+&lt;figure class="left" >
+&lt;img src="/2021/20w-led.jpg" />
+&lt;/figure>
+&lt;p>The great thing about using Zigbee lights is that I can automate the whole setup and control all of the lights and the camera from a button (I&amp;rsquo;m using &lt;a href="https://www.home-assistant.io/">Home Assistant&lt;/a>. The lights can be automatically configured to the correct color temperature for the time of day. More to come on that in another post!&lt;/p></content></item><item><title>Diy Teleprompter</title><link>/posts/diy-teleprompter/</link><pubDate>Wed, 01 Sep 2021 15:34:58 +0100</pubDate><guid>/posts/diy-teleprompter/</guid><description>Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.
 I wanted a compact, inexpensive teleprompter to fit between my two desktop monitors to show me my Zoom window and look directly at my webcam.
-The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.</description></item></channel></rss>
+The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.</description><content>&lt;p>Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.&lt;/p>
+&lt;p>I wanted a compact, inexpensive teleprompter to fit between my two desktop monitors to show me my Zoom window and look directly at my webcam.&lt;br>
+The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.&lt;/p>
+&lt;p>My solution was to mount a &lt;a href="https://www.amazon.co.uk/gp/product/B076CBHMQM/">7&amp;quot; field monitor&lt;/a> to my monitor stand and attach the &lt;a href="https://www.aliexpress.com/item/4001323460983.html">telepromter&lt;/a> to that.&lt;/p>
+&lt;p>&lt;img src="/2021/teleprompter.jpg" alt="Teleprompter">&lt;/p>
+&lt;p>I&amp;rsquo;ve found SmallRig components to be excellent value and quality. I used a &lt;a href="https://www.amazon.co.uk/gp/product/B076HLBZDX/">Magic Arm&lt;/a> and &lt;a href="https://www.amazon.co.uk/gp/product/B00CIHRKM4/">Cool Cheese Bar&lt;/a> to attach everything to a monitor mount. I also added some Sugru (blue!) to keep the teleprompter stable.&lt;/p>
+&lt;p>I still need to tidy up the cabling a bit, but otherwise I&amp;rsquo;m really happy with the solution.&lt;/p></content></item></channel></rss>
