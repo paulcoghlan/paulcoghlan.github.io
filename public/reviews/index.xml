@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reviews on paulcoghlan.github.io</title>
+    <link>/reviews/</link>
+    <description>Recent content in Reviews on paulcoghlan.github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 08 Feb 2022 12:32:35 +0100</lastBuildDate><atom:link href="/reviews/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Coming soon</title>
+      <link>/reviews/my-first-review/</link>
+      <pubDate>Tue, 08 Feb 2022 12:32:35 +0100</pubDate>
+      
+      <guid>/reviews/my-first-review/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+  </channel>
+</rss>

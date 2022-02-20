@@ -2,7 +2,14 @@
 Personal Blogging Site 
 
 ## Developing
-Run local instance:
+
+### Add post
+
+```
+hugo new content/posts/add-audio-delay-obs.md
+```
+
+### Run local instance
 
 ```
 % hugo server -D

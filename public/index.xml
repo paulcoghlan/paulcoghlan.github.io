@@ -1,20 +1,352 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Paul Coghlan&#39;s Public Scratchpad</title>
-    <link>https://paulcoghlan.github.io/</link>
-    <description>Recent content on Paul Coghlan&#39;s Public Scratchpad</description>
+    <title>paulcoghlan.github.io</title>
+    <link>/</link>
+    <description>Recent content on paulcoghlan.github.io</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>Paul Coghlan</copyright>
-    <lastBuildDate>Thu, 08 Jul 2021 12:32:35 +0100</lastBuildDate><atom:link href="https://paulcoghlan.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 15 Feb 2022 18:29:26 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tips for using AWS Lambda Runtime Interface Emulator</title>
+      <link>/posts/using-aws-lambda-rie/</link>
+      <pubDate>Tue, 15 Feb 2022 18:29:26 +0000</pubDate>
+      
+      <guid>/posts/using-aws-lambda-rie/</guid>
+      <description>Scenario I&amp;rsquo;ve found the AWS Lambda Runtime Interface Emulator (RIE) to be a very useful tool to help develop custom Docker images for AWS Lambdas - but I&amp;rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.
+My scenario was that I needed to develop a service to read a SQS message containing a HTML link, convert the HTML to PDF, and upload the PDF to S3.
+I was using wkhtmltopdf HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3 integration glue code in Kotlin to align with the rest of the codebase.</description>
+      <content>&lt;h2 id=&#34;scenario&#34;&gt;Scenario&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;ve found the &lt;a href=&#34;https://github.com/aws/aws-lambda-runtime-interface-emulator&#34;&gt;AWS Lambda Runtime Interface Emulator&lt;/a&gt; (RIE) to be a very useful tool to help develop custom Docker
+images for AWS Lambdas - but I&amp;rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.&lt;/p&gt;
+&lt;p&gt;My scenario was that I needed to develop a service to read a SQS message containing a HTML link,
+convert the HTML to PDF, and upload the PDF to S3.&lt;/p&gt;
+&lt;p&gt;I was using &lt;code&gt;wkhtmltopdf&lt;/code&gt; HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3
+integration glue code in Kotlin to align with the rest of the codebase.&lt;/p&gt;
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2022/convertor.png&#34;   style=&#34;width: 320px;&#34;  /&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;h2 id=&#34;why-use-a-lambda-with-a-custom-docker-image&#34;&gt;Why use a Lambda with a custom Docker image?&lt;/h2&gt;
+&lt;p&gt;The easiest option to creating an AWS Lambda is to upload a ZIP file archive containing a raw Python,
+Java, etc app.  However:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You might want to use a runtime that AWS doesn’t currently support&lt;/li&gt;
+&lt;li&gt;Or you’re running 3rd-party binaries (e.g &lt;code&gt;wkhtmltopdf&lt;/code&gt; HTML-&amp;gt; PDF convertor, which
+is fussy about Qt libraries)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;how-to-use-a-custom-docker-image&#34;&gt;How to use a custom Docker image&lt;/h2&gt;
+&lt;p&gt;Your AWS Lambda can trigger an executable in a Docker container.  Either:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Base on a AWS-provided image with Runtime Interface Client (RIC) already included - see &lt;a href=&#34;https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-images-lp&#34;&gt;https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-images-lp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Or create your own custom image, but add a &lt;a href=&#34;https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-api-client&#34;&gt;Runtime Image Client&lt;/a&gt; (RIC) to interface Lambda services to your function code
+e.g. for a Java Gradle build, add the following dependency:&lt;br&gt;
+&lt;code&gt;implementation(&amp;quot;com.amazonaws:aws-lambda-java-runtime-interface-client:1.0.0&amp;quot;)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;why-develop-locally&#34;&gt;Why develop locally?&lt;/h2&gt;
+&lt;p&gt;The main reason to develop images locally is that it offers a much faster development cycle - there
+is no need to upload images to S3!&lt;/p&gt;
+&lt;p&gt;Logging issues following on from an incorrect Docker config are often easier to debug locally because
+you can change the &lt;code&gt;Dockerfile&lt;/code&gt; and see the effects almost immediately.  You can also inspect
+the container itself as it is running on your local host.&lt;/p&gt;
+&lt;h2 id=&#34;how-to-use-the-aws-runtime-interface-emulator-with-your-custom-image&#34;&gt;How to use the AWS Runtime Interface Emulator with your custom image&lt;/h2&gt;
+&lt;p&gt;To recap: if you are using a custom Docker image you need a &lt;a href=&#34;https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-api-client&#34;&gt;Runtime Image Client&lt;/a&gt; (RIC) included in the deployed application.&lt;/p&gt;
+&lt;p&gt;Additionally if you are developing locally you need a &lt;a href=&#34;https://github.com/aws/aws-lambda-runtime-interface-emulator/&#34;&gt;Runtime Interface Emulator&lt;/a&gt; to expose a fake Lambda HTTP endpoint.  This RIE can be used
+to trigger your function and verify that it will work as desired when it is deployed to AWS services.&lt;/p&gt;
+&lt;p&gt;I always find a diagram helps in these situations.  The figure below compares the architecture of a
+real AWS Lambda function running in the cloud against an emulated local one running on your PC or laptop:&lt;/p&gt;
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2022/localdev.png&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;The steps are as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Mount AWS Runtime Interface Emulator (RIE) directory and specify com.amazonaws.services.lambda.runtime.api.client.AWSLambda entrypoint:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sh&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;△&#34; data-label-collapse=&#34;▽&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sh&#34; &gt;&lt;code&gt;
+# Install RIE - provides fake Lambda HTTP endpoint to trigger your function
+mkdir -p ~/.aws-lambda-rie &amp;amp;&amp;amp; \
+    curl -Lo ~/.aws-lambda-rie/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie &amp;amp;&amp;amp; \
+    chmod &amp;#43;x ~/.aws-lambda-rie/aws-lambda-rie   
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Run Docker image containing target function (&lt;code&gt;lambdas:latest&lt;/code&gt; in this instance):&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;2&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;2&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sh&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;△&#34; data-label-collapse=&#34;▽&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sh&#34; &gt;&lt;code&gt;
+docker run -v ~/.aws-lambda-rie:/aws-lambda \ 
+--entrypoint /aws-lambda/aws-lambda-rie -p 9000:8080 lambdas:latest /usr/bin/java \
+-cp &amp;#39;.*:/opt/java/generate_pdf.jar&amp;#39; \
+com.amazonaws.services.lambda.runtime.api.client.AWSLambda  lambdas.generatepdf.GeneratePDF::handleRequest
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Finally, you can invoke your Lambda function via the RIE endpoint:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;3&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;3&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sh&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;△&#34; data-label-collapse=&#34;▽&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sh&#34; &gt;&lt;code&gt;
+curl -XPOST &amp;#34;http://localhost:9000/2015-03-31/functions/function/invocations&amp;#34; -d &amp;#39;{}&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Lambdas are great - here we’ve isolated a 3rd party binary from the rest of our application infrastructure 🚀&lt;/li&gt;
+&lt;li&gt;The AWS RIE framework is useful if you have Lambda config issues&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;some-tips&#34;&gt;Some tips&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Watch out for Dockerfile ENTRYPOINT vs CMD! 🦶🔫 - see &lt;a href=&#34;http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/&#34;&gt;http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;You can quickly check that how your environment variables are setup from:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;4&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;4&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sh&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;△&#34; data-label-collapse=&#34;▽&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sh&#34; &gt;&lt;code&gt;
+docker inspect --format=&amp;#39;{{range .Config.Env}}{{println .}}{{end}}&amp;#39; &amp;lt;image&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+</content>
+    </item>
+    
+    <item>
+      <title>Coming soon</title>
+      <link>/reviews/my-first-review/</link>
+      <pubDate>Tue, 08 Feb 2022 12:32:35 +0100</pubDate>
+      
+      <guid>/reviews/my-first-review/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Shells</title>
+      <link>/notes/shells/</link>
+      <pubDate>Tue, 09 Nov 2021 12:40:18 +0000</pubDate>
+      
+      <guid>/notes/shells/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Ikea Homestudio Lights</title>
+      <link>/posts/ikea-homestudio-lights/</link>
+      <pubDate>Thu, 09 Sep 2021 16:34:28 +0100</pubDate>
+      
+      <guid>/posts/ikea-homestudio-lights/</guid>
+      <description>I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look part of a typical desk environment.
+My setup is based on two $39/£29 IKEA Skurup desk lamps.
+I bought some Osram Zigbee E14 LED lights from Amazon UK when they were discounted to £4.49, and with the help of a vice I very carefully popped the plastic cover off:</description>
+      <content>&lt;p&gt;I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look
+part of a typical desk environment.&lt;/p&gt;
+&lt;p&gt;My setup is based on two $39/£29 &lt;a href=&#34;https://www.ikea.com/gb/en/p/skurup-work-wall-lamp-black-80471143/&#34;&gt;IKEA Skurup&lt;/a&gt; desk lamps.&lt;/p&gt;
+&lt;p&gt;I bought some Osram Zigbee E14 LED lights from &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B0747VDHG3&#34;&gt;Amazon UK&lt;/a&gt; when they were discounted to £4.49, and
+with the help of a vice I very carefully popped the plastic cover off:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/2021/IMG_4514.jpg&#34; alt=&#34;Osram lamp with top cover off&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(notice there are two bits of glue on the cover - maybe a heat gun would have made it easier?)&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s what the modified bulb looks like in the lamp:
+&lt;img src=&#34;/2021/no-cover.jpg&#34; alt=&#34;Bulb in situ&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I ordered a 3mm thick acrylic disc cut to the measured size of the lamp interior (117mm) from &lt;a href=&#34;https://www.simplyplastics.com/catalog/discs/cast-acrylic-round-discs/led-light-diffusing-opal-acrylic-disc/c-24/c-93/p-962&#34;&gt;SimplyPlastics&lt;/a&gt;.  I think the result isn&amp;rsquo;t too shabby:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/2021/finished-product.jpg&#34; alt=&#34;Ikea lamp with diffuser&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Here are some comparison pics:&lt;/p&gt;
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2021/original-lamp.jpg&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2021/with-disc.jpg&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2021/20w-led.jpg&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;The great thing about using Zigbee lights is that I can automate the whole setup and control all of the lights and the camera from a button (I&amp;rsquo;m using &lt;a href=&#34;https://www.home-assistant.io/&#34;&gt;Home Assistant&lt;/a&gt;.  The lights can be automatically configured to the correct color temperature for the time of day.  More to come on that in another post!&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Ikea Homestudio Lights</title>
+      <link>/projects/ikea-homestudio-lights/</link>
+      <pubDate>Thu, 09 Sep 2021 16:34:28 +0100</pubDate>
+      
+      <guid>/projects/ikea-homestudio-lights/</guid>
+      <description>I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look part of a typical desk environment.
+My setup is based on two $39/£29 IKEA Skurup desk lamps.
+I bought some Osram Zigbee E14 LED lights from Amazon UK when they were discounted to £4.49, and with the help of a vice I very carefully popped the plastic cover off:</description>
+      <content>&lt;p&gt;I&amp;rsquo;ve built an automated home studio lighting setup for less than $100 which I believe produces more flattering images whilst being unobtrusive enough to look
+part of a typical desk environment.&lt;/p&gt;
+&lt;p&gt;My setup is based on two $39/£29 &lt;a href=&#34;https://www.ikea.com/gb/en/p/skurup-work-wall-lamp-black-80471143/&#34;&gt;IKEA Skurup&lt;/a&gt; desk lamps.&lt;/p&gt;
+&lt;p&gt;I bought some Osram Zigbee E14 LED lights from &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B0747VDHG3&#34;&gt;Amazon UK&lt;/a&gt; when they were discounted to £4.49, and
+with the help of a vice I very carefully popped the plastic cover off:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/2021/IMG_4514.jpg&#34; alt=&#34;Osram lamp with top cover off&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(notice there are two bits of glue on the cover - maybe a heat gun would have made it easier?)&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s what the modified bulb looks like in the lamp:
+&lt;img src=&#34;/2021/no-cover.jpg&#34; alt=&#34;Bulb in situ&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I ordered a 3mm thick acrylic disc cut to the measured size of the lamp interior (117mm) from &lt;a href=&#34;https://www.simplyplastics.com/catalog/discs/cast-acrylic-round-discs/led-light-diffusing-opal-acrylic-disc/c-24/c-93/p-962&#34;&gt;SimplyPlastics&lt;/a&gt;.  I think the result isn&amp;rsquo;t too shabby:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/2021/finished-product.jpg&#34; alt=&#34;Ikea lamp with diffuser&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Here are some comparison pics:&lt;/p&gt;
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2021/original-lamp.jpg&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2021/with-disc.jpg&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+
+  &lt;figure class=&#34;left&#34; &gt;
+    &lt;img src=&#34;/2021/20w-led.jpg&#34;   /&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;The great thing about using Zigbee lights is that I can automate the whole setup and control all of the lights and the camera from a button (I&amp;rsquo;m using &lt;a href=&#34;https://www.home-assistant.io/&#34;&gt;Home Assistant&lt;/a&gt;.  The lights can be automatically configured to the correct color temperature for the time of day.  More to come on that in another post!&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Diy Teleprompter</title>
+      <link>/posts/diy-teleprompter/</link>
+      <pubDate>Wed, 01 Sep 2021 15:34:58 +0100</pubDate>
+      
+      <guid>/posts/diy-teleprompter/</guid>
+      <description>Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.
+I wanted a compact, inexpensive teleprompter to fit between my two desktop monitors to show me my Zoom window and look directly at my webcam.
+The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.</description>
+      <content>&lt;p&gt;Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.&lt;/p&gt;
+&lt;p&gt;I wanted a compact, inexpensive teleprompter to fit between my two desktop monitors to show me my Zoom window and look directly at my webcam.&lt;br&gt;
+The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.&lt;/p&gt;
+&lt;p&gt;My solution was to mount a &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B076CBHMQM/&#34;&gt;7&amp;quot; field monitor&lt;/a&gt; to my monitor stand and attach the &lt;a href=&#34;https://www.aliexpress.com/item/4001323460983.html&#34;&gt;telepromter&lt;/a&gt; to that.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/2021/teleprompter.jpg&#34; alt=&#34;Teleprompter&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve found SmallRig components to be excellent value and quality.  I used a &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B076HLBZDX/&#34;&gt;Magic Arm&lt;/a&gt; and &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B00CIHRKM4/&#34;&gt;Cool Cheese Bar&lt;/a&gt; to attach everything to a monitor mount.  I also added some Sugru (blue!) to keep the teleprompter stable.&lt;/p&gt;
+&lt;p&gt;I still need to tidy up the cabling a bit, but otherwise I&amp;rsquo;m really happy with the solution.&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Diy Teleprompter</title>
+      <link>/projects/diy-teleprompter/</link>
+      <pubDate>Wed, 01 Sep 2021 15:34:58 +0100</pubDate>
+      
+      <guid>/projects/diy-teleprompter/</guid>
+      <description>Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.
+I wanted a compact, inexpensive teleprompter to fit between my two desktop monitors to show me my Zoom window and look directly at my webcam.
+The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.</description>
+      <content>&lt;p&gt;Being able to look someone in the eye is something we take for granted when we meet someone face-to-face, but this is tricky with desktop monitors.&lt;/p&gt;
+&lt;p&gt;I wanted a compact, inexpensive teleprompter to fit between my two desktop monitors to show me my Zoom window and look directly at my webcam.&lt;br&gt;
+The problem with the less expensive teleprompter models is that they tend to be made of plastic, and so unable to support anything heavier than a tablet/phone.&lt;/p&gt;
+&lt;p&gt;My solution was to mount a &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B076CBHMQM/&#34;&gt;7&amp;quot; field monitor&lt;/a&gt; to my monitor stand and attach the &lt;a href=&#34;https://www.aliexpress.com/item/4001323460983.html&#34;&gt;telepromter&lt;/a&gt; to that.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/2021/teleprompter.jpg&#34; alt=&#34;Teleprompter&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve found SmallRig components to be excellent value and quality.  I used a &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B076HLBZDX/&#34;&gt;Magic Arm&lt;/a&gt; and &lt;a href=&#34;https://www.amazon.co.uk/gp/product/B00CIHRKM4/&#34;&gt;Cool Cheese Bar&lt;/a&gt; to attach everything to a monitor mount.  I also added some Sugru (blue!) to keep the teleprompter stable.&lt;/p&gt;
+&lt;p&gt;I still need to tidy up the cabling a bit, but otherwise I&amp;rsquo;m really happy with the solution.&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Fri, 09 Jul 2021 12:00:45 +0100</pubDate>
+      
+      <guid>/about/</guid>
+      <description>Public brain-dump of all of the things I&amp;rsquo;m working on.
+My main interests: software development (Java, Scala and Go), home automation (Raspberry Pi, ESP32), home entertainment, digital health/wellbeing, photography and video production.
+How to contact me:
+ Github https://github.com/paulcoghlan Linkedin https://www.linkedin.com/in/pgcoghlan  </description>
+      <content>&lt;p&gt;Public brain-dump of all of the things I&amp;rsquo;m working on.&lt;/p&gt;
+&lt;p&gt;My main interests: software development (Java, Scala and Go), home automation (Raspberry Pi, ESP32),
+home entertainment, digital health/wellbeing, photography and video production.&lt;/p&gt;
+&lt;p&gt;How to contact me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Github &lt;a href=&#34;https://github.com/paulcoghlan&#34;&gt;https://github.com/paulcoghlan&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Linkedin &lt;a href=&#34;https://www.linkedin.com/in/pgcoghlan&#34;&gt;https://www.linkedin.com/in/pgcoghlan&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    </item>
+    
     <item>
       <title>My First Post</title>
-      <link>https://paulcoghlan.github.io/posts/my-first-post/</link>
+      <link>/posts/my-first-post/</link>
       <pubDate>Thu, 08 Jul 2021 12:32:35 +0100</pubDate>
       
-      <guid>https://paulcoghlan.github.io/posts/my-first-post/</guid>
+      <guid>/posts/my-first-post/</guid>
       <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>My First Post</title>
+      <link>/projects/my-first-post/</link>
+      <pubDate>Thu, 08 Jul 2021 12:32:35 +0100</pubDate>
+      
+      <guid>/projects/my-first-post/</guid>
+      <description></description>
+      <content></content>
     </item>
     
   </channel>
