@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>obs on paulcoghlan.github.io</title><link>/tags/obs/</link><description>Recent content in obs on paulcoghlan.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-gb</language><lastBuildDate>Sun, 20 Feb 2022 14:38:12 +0000</lastBuildDate><atom:link href="/tags/obs/index.xml" rel="self" type="application/rss+xml"/><item><title>Add Audio Delay to MacOS OBS</title><link>/posts/add-audio-delay-obs/</link><pubDate>Sun, 20 Feb 2022 14:38:12 +0000</pubDate><guid>/posts/add-audio-delay-obs/</guid><description>Unsynchronised audio and video is annoying and fatiguing on long Zoom calls. Unfortunately using the OBS Virtual Camera feature will add latency to your video feed, so you need add an appropriate audio delay.
+There are two established MacOS tools for adding an audio loopback (Loopback and Soundflower) but they both require the installation of a MacOS kernel extension - which I wasn&amp;rsquo;t able to do because of the Mobile Device Manager app installed by my employer.</description><content>&lt;p>Unsynchronised audio and video is annoying and fatiguing on long Zoom calls. Unfortunately using the OBS
+Virtual Camera feature will add latency to your video feed, so you need add an appropriate audio delay.&lt;/p>
+&lt;p>There are two established MacOS tools for adding an audio loopback (&lt;a href="https://rogueamoeba.com/loopback/">Loopback&lt;/a> and
+&lt;a href="https://github.com/mattingalls/Soundflower">Soundflower&lt;/a>) but they both require the installation of a MacOS kernel extension -
+which I wasn&amp;rsquo;t able to do because of the Mobile Device Manager app installed by my employer.&lt;/p>
+&lt;p>&lt;a href="https://github.com/ExistentialAudio/BlackHole">BlackHole&lt;/a> is open source and fortunately doesn&amp;rsquo;t require a kernel extension to be installed.&lt;/p>
+&lt;p>I was able to use BlackHole with OBS to add an audio delay as follows:&lt;/p>
+&lt;ol>
+&lt;li>Install BlackHole (&lt;code>brew install blackhole-2ch&lt;/code>)&lt;/li>
+&lt;li>Set &lt;code>BlackHole 2ch&lt;/code> to be the &lt;code>Monitoring Device&lt;/code> in audio Settings:
+&lt;figure class="left" >
+&lt;img src="/2022/monitor.png" />
+&lt;/figure>
+&lt;/li>
+&lt;li>Click on the &amp;ldquo;Advanced Audio Properties&amp;rdquo; cog to add a delay to your audio device:
+&lt;figure class="left" >
+&lt;img src="/2022/cog.png" style="width: 320px;" />
+&lt;/figure>
+&lt;/li>
+&lt;li>Set &lt;code>Audio Monitoring&lt;/code> to &lt;code>Monitor Only (mute output)&lt;/code> and alter &lt;code>Sync Offset&lt;/code> to set the audio delay
+&lt;figure class="left" >
+&lt;img src="/2022/delay.png" />
+&lt;/figure>
+&lt;/li>
+&lt;li>Use &lt;code>BlackHole 2ch&lt;/code> as the input audio device in your video call software, e.g. for Zoom:
+&lt;figure class="left" >
+&lt;img src="/2022/microphone.png" />
+&lt;/figure>
+&lt;/li>
+&lt;/ol>
+&lt;p>You can join a test video call on another device and use something like a metronome app to figure out the necessary audio delay. I used &lt;a href="https://apps.apple.com/ee/app/tempus-a-touch-screen-metronome/id955594935">Tempus&lt;/a> on my iPhone to flash the screen/make a sound at a regular interval.&lt;/p></content></item></channel></rss>
