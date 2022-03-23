@@ -1,196 +1,44 @@
-<!doctype html><html lang=en>
-<head>
-<title>Tips for using AWS Lambda Runtime Interface Emulator :: paulcoghlan.github.io</title>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="Scenario I&amp;rsquo;ve found the AWS Lambda Runtime Interface Emulator (RIE) to be a very useful tool to help develop custom Docker images for AWS Lambdas - but I&amp;rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.
+<!doctype html><html lang=en><head><title>Tips for using AWS Lambda Runtime Interface Emulator :: paulcoghlan.github.io</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Scenario I&amp;rsquo;ve found the AWS Lambda Runtime Interface Emulator (RIE) to be a very useful tool to help develop custom Docker images for AWS Lambdas - but I&amp;rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.
 My scenario was that I needed to develop a service to read a SQS message containing a HTML link, convert the HTML to PDF, and upload the PDF to S3.
-I was using wkhtmltopdf HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3 integration glue code in Kotlin to align with the rest of the codebase.">
-<meta name=keywords content>
-<meta name=robots content="noodp">
-<link rel=canonical href=/posts/using-aws-lambda-rie/>
-<link rel=stylesheet href=/assets/style.css>
-<link rel=apple-touch-icon href=/img/apple-touch-icon-192x192.png>
-<link rel="shortcut icon" href=/img/favicon/orange.png>
-<meta name=twitter:card content="summary">
-<meta property="og:locale" content="en">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Tips for using AWS Lambda Runtime Interface Emulator">
-<meta property="og:description" content="Scenario I&amp;rsquo;ve found the AWS Lambda Runtime Interface Emulator (RIE) to be a very useful tool to help develop custom Docker images for AWS Lambdas - but I&amp;rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.
+I was using wkhtmltopdf HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3 integration glue code in Kotlin to align with the rest of the codebase."><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=/posts/using-aws-lambda-rie/><link rel=stylesheet href=/assets/style.css><link rel=apple-touch-icon href=/img/apple-touch-icon-192x192.png><link rel="shortcut icon" href=/img/favicon/orange.png><meta name=twitter:card content="summary"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="Tips for using AWS Lambda Runtime Interface Emulator"><meta property="og:description" content="Scenario I&amp;rsquo;ve found the AWS Lambda Runtime Interface Emulator (RIE) to be a very useful tool to help develop custom Docker images for AWS Lambdas - but I&amp;rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.
 My scenario was that I needed to develop a service to read a SQS message containing a HTML link, convert the HTML to PDF, and upload the PDF to S3.
-I was using wkhtmltopdf HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3 integration glue code in Kotlin to align with the rest of the codebase.">
-<meta property="og:url" content="/posts/using-aws-lambda-rie/">
-<meta property="og:site_name" content="paulcoghlan.github.io">
-<meta property="og:image" content="/img/favicon/orange.png">
-<meta property="og:image:width" content="2048">
-<meta property="og:image:height" content="1024">
-<meta property="article:published_time" content="2022-02-15 18:29:26 +0000 UTC">
-</head>
-<body class=orange>
-<div class="container headings--one-size">
-<header class=header>
-<div class=header__inner>
-<div class=header__logo>
-<a href=/>
-<div class=logo>
-paulcoghlan.github.io
-</div>
-</a>
-</div>
-<div class=menu-trigger>menu</div>
-</div>
-<nav class=menu>
-<ul class="menu__inner menu__inner--desktop">
-<li><a href=/about>About</a></li>
-<li><a href=/reviews>Book reviews</a></li>
-<li><a href=/tags>Tags</a></li>
-<li><a href=/posts>Writings</a></li>
-</ul>
-<ul class="menu__inner menu__inner--mobile">
-<li><a href=/about>About</a></li>
-<li><a href=/reviews>Book reviews</a></li>
-<li><a href=/tags>Tags</a></li>
-<li><a href=/posts>Writings</a></li>
-</ul>
-</nav>
-</header>
-<div class=content>
-<div class=post>
-<h1 class=post-title>
-<a href=/posts/using-aws-lambda-rie/>Tips for using AWS Lambda Runtime Interface Emulator</a></h1>
-<div class=post-meta>
-<span class=post-date>
-2022-02-15
-</span>
-</div>
-<span class=post-tags>
-#<a href=/tags/aws/>aws</a>&nbsp;
+I was using wkhtmltopdf HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3 integration glue code in Kotlin to align with the rest of the codebase."><meta property="og:url" content="/posts/using-aws-lambda-rie/"><meta property="og:site_name" content="paulcoghlan.github.io"><meta property="og:image" content="/img/favicon/orange.png"><meta property="og:image:width" content="2048"><meta property="og:image:height" content="1024"><meta property="article:published_time" content="2022-02-15 18:29:26 +0000 UTC"></head><body class=orange><div class="container headings--one-size"><header class=header><div class=header__inner><div class=header__logo><a href=/><div class=logo>paulcoghlan.github.io</div></a></div><div class=menu-trigger>menu</div></div><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/about>About</a></li><li><a href=/reviews>Book reviews</a></li><li><a href=/tags>Tags</a></li><li><a href=/posts>Writings</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/about>About</a></li><li><a href=/reviews>Book reviews</a></li><li><a href=/tags>Tags</a></li><li><a href=/posts>Writings</a></li></ul></nav></header><div class=content><div class=post><h1 class=post-title><a href=/posts/using-aws-lambda-rie/>Tips for using AWS Lambda Runtime Interface Emulator</a></h1><div class=post-meta><span class=post-date>2022-02-15</span></div><span class=post-tags>#<a href=/tags/aws/>aws</a>&nbsp;
 #<a href=/tags/docker/>docker</a>&nbsp;
 #<a href=/tags/tips/>tips</a>&nbsp;
 #<a href=/tags/cloud/>cloud</a>&nbsp;
-#<a href=/tags/lambdas/>lambdas</a>&nbsp;
-</span>
-<div class=post-content><div>
-<h2 id=scenario>Scenario<a href=#scenario class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>I&rsquo;ve found the <a href=https://github.com/aws/aws-lambda-runtime-interface-emulator>AWS Lambda Runtime Interface Emulator</a> (RIE) to be a very useful tool to help develop custom Docker
-images for AWS Lambdas - but I&rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.</p>
-<p>My scenario was that I needed to develop a service to read a SQS message containing a HTML link,
-convert the HTML to PDF, and upload the PDF to S3.</p>
-<p>I was using <code>wkhtmltopdf</code> HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3
-integration glue code in Kotlin to align with the rest of the codebase.</p>
-<figure class=left>
-<img src=/2022/convertor.png style=width:320px>
-</figure>
-<h2 id=why-use-a-lambda-with-a-custom-docker-image>Why use a Lambda with a custom Docker image?<a href=#why-use-a-lambda-with-a-custom-docker-image class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>The easiest option to creating an AWS Lambda is to upload a ZIP file archive containing a raw Python,
-Java, etc app. However:</p>
-<ul>
-<li>You might want to use a runtime that AWS doesn’t currently support</li>
-<li>Or you’re running 3rd-party binaries (e.g <code>wkhtmltopdf</code> HTML-> PDF convertor, which
-is fussy about Qt libraries)</li>
-</ul>
-<h2 id=how-to-use-a-custom-docker-image>How to use a custom Docker image<a href=#how-to-use-a-custom-docker-image class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>Your AWS Lambda can trigger an executable in a Docker container. Either:</p>
-<ul>
-<li>Base on a AWS-provided image with Runtime Interface Client (RIC) already included - see <a href=https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-images-lp>https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-images-lp</a></li>
-<li>Or create your own custom image, but add a <a href=https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-api-client>Runtime Image Client</a> (RIC) to interface Lambda services to your function code
-e.g. for a Java Gradle build, add the following dependency:<br>
-<code>implementation("com.amazonaws:aws-lambda-java-runtime-interface-client:1.0.0")</code></li>
-</ul>
-<h2 id=why-develop-locally>Why develop locally?<a href=#why-develop-locally class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>The main reason to develop images locally is that it offers a much faster development cycle - there
-is no need to upload images to S3!</p>
-<p>Logging issues following on from an incorrect Docker config are often easier to debug locally because
+#<a href=/tags/lambdas/>lambdas</a>&nbsp;</span><div class=post-content><div><h2 id=scenario>Scenario<a href=#scenario class=hanchor arialabel=Anchor>&#8983;</a></h2><p>I&rsquo;ve found the <a href=https://github.com/aws/aws-lambda-runtime-interface-emulator>AWS Lambda Runtime Interface Emulator</a> (RIE) to be a very useful tool to help develop custom Docker
+images for AWS Lambdas - but I&rsquo;ve not seen it mentioned much in blogs or StackOverflow, etc.</p><p>My scenario was that I needed to develop a service to read a SQS message containing a HTML link,
+convert the HTML to PDF, and upload the PDF to S3.</p><p>I was using <code>wkhtmltopdf</code> HTML to PDF convertor (basically a headless Chrome Browser), with some SQS/S3
+integration glue code in Kotlin to align with the rest of the codebase.</p><figure class=left><img src=/2022/convertor.png style=width:320px></figure><h2 id=why-use-a-lambda-with-a-custom-docker-image>Why use a Lambda with a custom Docker image?<a href=#why-use-a-lambda-with-a-custom-docker-image class=hanchor arialabel=Anchor>&#8983;</a></h2><p>The easiest option to creating an AWS Lambda is to upload a ZIP file archive containing a raw Python,
+Java, etc app. However:</p><ul><li>You might want to use a runtime that AWS doesn’t currently support</li><li>Or you’re running 3rd-party binaries (e.g <code>wkhtmltopdf</code> HTML-> PDF convertor, which
+is fussy about Qt libraries)</li></ul><h2 id=how-to-use-a-custom-docker-image>How to use a custom Docker image<a href=#how-to-use-a-custom-docker-image class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Your AWS Lambda can trigger an executable in a Docker container. Either:</p><ul><li>Base on a AWS-provided image with Runtime Interface Client (RIC) already included - see <a href=https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-images-lp>https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-images-lp</a></li><li>Or create your own custom image, but add a <a href=https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-api-client>Runtime Image Client</a> (RIC) to interface Lambda services to your function code
+e.g. for a Java Gradle build, add the following dependency:<br><code>implementation("com.amazonaws:aws-lambda-java-runtime-interface-client:1.0.0")</code></li></ul><h2 id=why-develop-locally>Why develop locally?<a href=#why-develop-locally class=hanchor arialabel=Anchor>&#8983;</a></h2><p>The main reason to develop images locally is that it offers a much faster development cycle - there
+is no need to upload images to S3!</p><p>Logging issues following on from an incorrect Docker config are often easier to debug locally because
 you can change the <code>Dockerfile</code> and see the effects almost immediately. You can also inspect
-the container itself as it is running on your local host.</p>
-<h2 id=how-to-use-the-aws-runtime-interface-emulator-with-your-custom-image>How to use the AWS Runtime Interface Emulator with your custom image<a href=#how-to-use-the-aws-runtime-interface-emulator-with-your-custom-image class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>To recap: if you are using a custom Docker image you need a <a href=https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-api-client>Runtime Image Client</a> (RIC) included in the deployed application.</p>
-<p>Additionally if you are developing locally you need a <a href=https://github.com/aws/aws-lambda-runtime-interface-emulator/>Runtime Interface Emulator</a> to expose a fake Lambda HTTP endpoint. This RIE can be used
-to trigger your function and verify that it will work as desired when it is deployed to AWS services.</p>
-<p>I always find a diagram helps in these situations. The figure below compares the architecture of a
-real AWS Lambda function running in the cloud against an emulated local one running on your PC or laptop:</p>
-<figure class=left>
-<img src=/2022/localdev.png>
-</figure>
-<p>The steps are as follows:</p>
-<ul>
-<li>Mount AWS Runtime Interface Emulator (RIE) directory and specify com.amazonaws.services.lambda.runtime.api.client.AWSLambda entrypoint:</li>
-</ul>
-<div class=collapsable-code>
-<input id=1 type=checkbox>
-<label for=1>
-<span class=collapsable-code__language>sh</span>
-<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span>
-</label>
-<pre class=language-sh><code>
+the container itself as it is running on your local host.</p><h2 id=how-to-use-the-aws-runtime-interface-emulator-with-your-custom-image>How to use the AWS Runtime Interface Emulator with your custom image<a href=#how-to-use-the-aws-runtime-interface-emulator-with-your-custom-image class=hanchor arialabel=Anchor>&#8983;</a></h2><p>To recap: if you are using a custom Docker image you need a <a href=https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html#runtimes-api-client>Runtime Image Client</a> (RIC) included in the deployed application.</p><p>Additionally if you are developing locally you need a <a href=https://github.com/aws/aws-lambda-runtime-interface-emulator/>Runtime Interface Emulator</a> to expose a fake Lambda HTTP endpoint. This RIE can be used
+to trigger your function and verify that it will work as desired when it is deployed to AWS services.</p><p>I always find a diagram helps in these situations. The figure below compares the architecture of a
+real AWS Lambda function running in the cloud against an emulated local one running on your PC or laptop:</p><figure class=left><img src=/2022/localdev.png></figure><p>The steps are as follows:</p><ul><li>Mount AWS Runtime Interface Emulator (RIE) directory and specify com.amazonaws.services.lambda.runtime.api.client.AWSLambda entrypoint:</li></ul><div class=collapsable-code><input id=1 type=checkbox>
+<label for=1><span class=collapsable-code__language>sh</span>
+<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span></label><pre class=language-sh><code>
 # Install RIE - provides fake Lambda HTTP endpoint to trigger your function
 mkdir -p ~/.aws-lambda-rie &amp;&amp; \
     curl -Lo ~/.aws-lambda-rie/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie &amp;&amp; \
     chmod &#43;x ~/.aws-lambda-rie/aws-lambda-rie   
-</code></pre>
-</div>
-<ul>
-<li>Run Docker image containing target function (<code>lambdas:latest</code> in this instance):</li>
-</ul>
-<div class=collapsable-code>
-<input id=2 type=checkbox>
-<label for=2>
-<span class=collapsable-code__language>sh</span>
-<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span>
-</label>
-<pre class=language-sh><code>
+</code></pre></div><ul><li>Run Docker image containing target function (<code>lambdas:latest</code> in this instance):</li></ul><div class=collapsable-code><input id=2 type=checkbox>
+<label for=2><span class=collapsable-code__language>sh</span>
+<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span></label><pre class=language-sh><code>
 docker run -v ~/.aws-lambda-rie:/aws-lambda \ 
 --entrypoint /aws-lambda/aws-lambda-rie -p 9000:8080 lambdas:latest /usr/bin/java \
 -cp &#39;.*:/opt/java/generate_pdf.jar&#39; \
 com.amazonaws.services.lambda.runtime.api.client.AWSLambda  lambdas.generatepdf.GeneratePDF::handleRequest
-</code></pre>
-</div>
-<ul>
-<li>Finally, you can invoke your Lambda function via the RIE endpoint:</li>
-</ul>
-<div class=collapsable-code>
-<input id=3 type=checkbox>
-<label for=3>
-<span class=collapsable-code__language>sh</span>
-<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span>
-</label>
-<pre class=language-sh><code>
+</code></pre></div><ul><li>Finally, you can invoke your Lambda function via the RIE endpoint:</li></ul><div class=collapsable-code><input id=3 type=checkbox>
+<label for=3><span class=collapsable-code__language>sh</span>
+<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span></label><pre class=language-sh><code>
 curl -XPOST &#34;http://localhost:9000/2015-03-31/functions/function/invocations&#34; -d &#39;{}&#39;
-</code></pre>
-</div>
-<h2 id=conclusion>Conclusion<a href=#conclusion class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<ul>
-<li>Lambdas are great - here we’ve isolated a 3rd party binary from the rest of our application infrastructure 🚀</li>
-<li>The AWS RIE framework is useful if you have Lambda config issues</li>
-</ul>
-<h2 id=some-tips>Some tips<a href=#some-tips class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<ul>
-<li>Watch out for Dockerfile ENTRYPOINT vs CMD! 🦶🔫 - see <a href=http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/>http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/</a></li>
-<li>You can quickly check that how your environment variables are setup from:</li>
-</ul>
-<div class=collapsable-code>
-<input id=4 type=checkbox>
-<label for=4>
-<span class=collapsable-code__language>sh</span>
-<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span>
-</label>
-<pre class=language-sh><code>
+</code></pre></div><h2 id=conclusion>Conclusion<a href=#conclusion class=hanchor arialabel=Anchor>&#8983;</a></h2><ul><li>Lambdas are great - here we’ve isolated a 3rd party binary from the rest of our application infrastructure 🚀</li><li>The AWS RIE framework is useful if you have Lambda config issues</li></ul><h2 id=some-tips>Some tips<a href=#some-tips class=hanchor arialabel=Anchor>&#8983;</a></h2><ul><li>Watch out for Dockerfile ENTRYPOINT vs CMD! 🦶🔫 - see <a href=http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/>http://aws.amazon.com/blogs/opensource/demystifying-entrypoint-cmd-docker/</a></li><li>You can quickly check that how your environment variables are setup from:</li></ul><div class=collapsable-code><input id=4 type=checkbox>
+<label for=4><span class=collapsable-code__language>sh</span>
+<span class=collapsable-code__toggle data-label-expand=△ data-label-collapse=▽></span></label><pre class=language-sh><code>
 docker inspect --format=&#39;{{range .Config.Env}}{{println .}}{{end}}&#39; &lt;image&gt; 
-</code></pre>
-</div>
-</div></div>
-</div>
-</div>
-<footer class=footer>
-<div class=footer__inner>
-<div class=copyright>
-<span>© 2022 Powered by <a href=http://gohugo.io>Hugo</a></span>
-<span>:: Theme made by <a href=https://twitter.com/panr>panr</a></span>
-</div>
-</div>
-</footer>
-<script src=/assets/main.js></script>
-<script src=/assets/prism.js></script>
-</div>
-</body>
-</html>
+</code></pre></div></div></div></div></div><footer class=footer><div class=footer__inner><div class=copyright><span>© 2022 Powered by <a href=http://gohugo.io>Hugo</a></span>
+<span>:: Theme made by <a href=https://twitter.com/panr>panr</a></span></div></div></footer><script src=/assets/main.js></script>
+<script src=/assets/prism.js></script></div></body></html>
